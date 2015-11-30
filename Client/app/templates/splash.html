@@ -1,0 +1,13 @@
+<div id="header">
+    <form ng-if="!vm.user.loggedIn" name="loginForm" ng-submit="vm.login(loginForm)" novalidate>
+        <label>Username
+            <input name="username" type="text" placeholder="Username" id="s-user" ng-model="vm.username" required /></label>
+        <label>Password
+            <input name="password" type="password" placeholder="Password" id="s-pass" ng-model="vm.password" required /></label>
+        <input class="submit" type="submit" value="Login" />
+    </form>
+    <div ng-if="vm.user.loggedIn" id="HelloUser"><span>Hello {{vm.user.username}}</span>       <span><button ng-click="vm.logoff()" class="submit">Logout</button></span></div>
+</div>
+<div id="NewGame">
+    <button ng-click="vm.newGame()" type="button" class="btn btn-primary" id="NewGameBtn">Find Game</button>
+</div>

@@ -1,0 +1,22 @@
+{
+  "name": "tcg01.client",
+  "version": "0.0.1",
+  "description": "AngularJS client for Trading Card Game",
+  "main": "app/app.js",
+  "author": "Jason Bush",
+  "license": "ISC",
+  "devDependencies": {
+    "del": "^2.1.0",
+    "gulp": "^3.9.0",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-express": "^0.3.5",
+    "gulp-flatten": "^0.2.0",
+    "gulp-ignore": "^2.0.1",
+    "gulp-inject": "^3.0.0",
+    "gulp-sass": "^2.1.0",
+    "stream-series": "^0.1.1"
+  },
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}

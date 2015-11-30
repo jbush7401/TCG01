@@ -1,0 +1,16 @@
+﻿<div><p>{{vm.card}}</p></div>
+<div class="cardContainer">
+    <img class="template" src="static/images/CardTemplate300x394.jpg" />
+    <img class="art" src="static/images/CardArt/{{vm.card.CardArtUrl}}" />
+    <div class="name">{{vm.card.Title}}</div>
+    <div class="movement">{{vm.card.Movement}}</div>
+    <div class="power">{{vm.card.PowerCost}}/{{vm.card.PowerProvided}}</div>
+    <div class="attack">{{vm.card.Attack}}</div>
+    <div class="life">{{vm.card.Life}}</div>
+    <div class="armor">{{vm.card.Armor}}</div>
+    <div class="textArea">
+        <span ng-if="vm.card.specialAbilities">Special Ability: </span><span ng-repeat="SpecialAbility in vm.card.specialAbilities">
+            <a href="{{SpecialAbility.id}}">{{SpecialAbility.Ability}}{{$last ? '' : ', '}}</a></span><br /><br />
+        {{vm.card.Description}}
+    </div>
+</div>
