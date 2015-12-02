@@ -207,8 +207,10 @@ router.get('/game', function (req, res, next) {
 });
 
 router.get('/sixtycards', function (req, res, next) {
-        GameModel.RandomSixtyCards().then(function(cards){
-            res.json(cards);
+        GameModel.TestDeckCreate(1).then(function(id){
+            GameModel.PlayerGameDeck.forge({id: id}).fetch({withRelated: ['DeckCards']}).then(function (cards) {
+                res.json(cards);
+            });
         });
 });
 

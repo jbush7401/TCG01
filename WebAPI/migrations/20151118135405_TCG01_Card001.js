@@ -17,6 +17,7 @@ exports.up = function(knex, Promise) {
             tbl.increments().primary();
             tbl.string('Ability', 50);
             tbl.integer('PowerCost');
+            tbl.string('Description');
         })
 
         .createTableIfNotExists('Card_SpecialAbility', function(tbl) {

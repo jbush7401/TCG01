@@ -2,24 +2,34 @@
 exports.up = function(knex, Promise) {
     return Promise.all(knex.schema
 
+        .createTableIfNotExists('User', function (tbl){
+            "use strict";
+            tbl.increments().primary();
+            tbl.string('Username', 50).unique().notNullable();
+            tbl.string('PasswordHash', 255).notNullable();
+            tbl.string('Email', 100);
+            tbl.date('JoinDate');
+            tbl.dateTime('LastLogin');
+        })
         .createTableIfNotExists('PlayerGameDeck', function(tbl) {
             tbl.increments().primary();
+            tbl.integer("PlayerId").references('id').inTable('User');
         })
 
         .createTableIfNotExists('PlayerGameDeck_Card', function(tbl){
             tbl.increments().primary();
             tbl.integer('PlayerGameDeckId').references('id').inTable('PlayerGameDeck');
-            tbl.integer('CardId').references('id').inTable('Card');
-        })
-
-        .createTableIfNotExists('PlayerHand', function(tbl) {
-            tbl.increments().primary();
-        })
-
-        .createTableIfNotExists('PlayerHand_Card', function(tbl){
-            tbl.increments().primary();
-            tbl.integer('PlayerHandId').references('id').inTable('PlayerHand');
-            tbl.integer('CardId').references('id').inTable('Card');
+            tbl.integer('OriginalCard').references('id').inTable('Card');
+            tbl.integer('CPowerCost');
+            tbl.integer('CPowerProvided');
+            tbl.integer('CMovement');
+            tbl.integer('CAttack');
+            tbl.integer('CLife');
+            tbl.integer('CArmor');
+            tbl.string('Conditions', 200);
+            tbl.string('Status', 50);
+            tbl.string('Location', 20);
+            tbl.integer('SIndex');
         })
 
         .createTableIfNotExists('GameBoard', function(tbl){
@@ -77,11 +87,13 @@ exports.up = function(knex, Promise) {
             tbl.integer('P1_Deck').references('id').inTable('PlayerGameDeck');
             tbl.integer('P2_Deck').references('id').inTable('PlayerGameDeck');
         })
+
     );
 };
 
 exports.down = function(knex, Promise) {
     return Promise.all(knex.schema
+        .dropTable('User')
         .dropTable('PlayerGameDeck_Card')
         .dropTable('PlayerHand_Card')
         .dropTable('Game')

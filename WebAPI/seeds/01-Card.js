@@ -76,7 +76,7 @@ exports.seed = function(knex, Promise) {
         ))).then(function () {
             return knex.insert(specialAbilities).into('SpecialAbility');
         }).then(function () {
-        return knex.insert(cards).into('Card');
+            return knex.insert(cards).into('Card');
         });
 
 };

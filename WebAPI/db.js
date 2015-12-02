@@ -7,4 +7,7 @@ var knexcfg = require('./knexfile').development;
 var knex = require('knex')(knexcfg);
 var bookshelf = require('bookshelf')(knex);
 
-module.exports.bookshelf = bookshelf;
+module.exports = {
+    knex: knex,
+    bookshelf: bookshelf
+};
