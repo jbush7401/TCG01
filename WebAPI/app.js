@@ -101,7 +101,6 @@ router.get('/setup', function(req, res) {
     });
 });
 
-
 router.use(function(req, res, next) {
     // check header or url parameters or post parameters for token
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -129,7 +128,6 @@ router.use(function(req, res, next) {
         });
     }
 });
-
 
 router.get('/users', function(req, res) {
     var users = new UserModel.Users();
@@ -160,7 +158,8 @@ router.get('/card/:id', function (req, res, next) {
 
 router.get('/game/:id', function (req, res, next) {
     GameModel.Game.forge({id: req.params.id})
-        .fetch({withRelated: ['GameBoard', {'Player1' : function(qb){ qb.column('id', 'Username')}}
+        .fetch({withRelated: ['GameBoard', {'Player1' : function(qb){ qb.column('id', 'Username')}}, {'Player2' : function(qb){ qb.column('id', 'Username')}},
+            'P1_Deck.DeckCards.OriginalCard', 'P2_Deck.DeckCards.OriginalCard'
         ]})
         .then(function (game){
             if(!game) {
@@ -193,16 +192,36 @@ router.get('/game', function (req, res, next) {
             new GameModel.GameBoard().save().then(function(model) {
                 callback(null, model)
             });
+        },
+        function(callback){
+            GameModel.TestDeckCreate(1).then(function(id){
+                GameModel.PlayerGameDeck.forge({id: id}).fetch({withRelated: ['DeckCards']}).then(function (model) {
+                    callback(null, model)
+                });
+            });
+        },
+        function(callback){
+            GameModel.TestDeckCreate(2).then(function(id){
+                GameModel.PlayerGameDeck.forge({id: id}).fetch({withRelated: ['DeckCards']}).then(function (model) {
+                    callback(null, model)
+                })
+            });
         }
     ],
     function(err, results){
-        var game = new GameModel.Game({Player1: results[0].get('id'), Player2: results[1].get('id'), BoardId: results[2].get('id')});
+        var game = new GameModel.Game({Player1: results[0].get('id'), Player2: results[1].get('id'), BoardId: results[2].get('id'), P1_Deck: results[3].get('id'), P2_Deck:results[4].get('id')});
         game.save().then(function(model){
             res.json(model);
         })
         .catch(function(e){
             console.log(e);
         });
+    });
+});
+
+router.get('/playerdeck/:id', function (req, res, next) {
+    GameModel.PlayerGameDeck.forge({id: req.params.id}).fetch({withRelated: ['DeckCards']}).then(function (cards) {
+        res.json(cards);
     });
 });
 

@@ -4,21 +4,22 @@
 "use strict";
 
 var bookshelf = require('../db').bookshelf;
+var GameModel = require('./Game');
 
 var Card = bookshelf.Model.extend({
     tableName: 'Card',
     specialAbilities: function() {
-        return this.belongsToMany(SpecialAbility, 'Card_SpecialAbility', 'CardId', 'SpecialAbilityId');
+        return this.belongsToMany('SpecialAbility', 'Card_SpecialAbility', 'CardId', 'SpecialAbilityId');
     },
-    PlayerDecks : function() {
-       return this.belongsTo(PlayerGameDeck, 'PlayerGameDeck_Card', 'CardId', 'PlayerGameDeckId')
+    playerGameDeck_Cards: function() {
+        return this.hasMany('PlayerGameDeck_Card', 'OriginalCard');
     }
 });
 
 var SpecialAbility = bookshelf.Model.extend({
     tableName: 'SpecialAbility',
     cards: function() {
-        return this.belongsToMany(Card, 'Card_SpecialAbility', 'SpecialAbilityId', 'CardId');
+        return this.belongsToMany('Card', 'Card_SpecialAbility', 'SpecialAbilityId', 'CardId');
     }
 });
 
@@ -33,8 +34,8 @@ var SpecialAbilities = bookshelf.Collection.extend({
 });
 
 module.exports = {
-    Card: Card,
-    SpecialAbility: SpecialAbility,
+    Card: bookshelf.model('Card', Card ),
+    SpecialAbility: bookshelf.model('SpecialAbility',SpecialAbility),
     Cards: Cards,
     SpecialAbilities: SpecialAbilities
 };

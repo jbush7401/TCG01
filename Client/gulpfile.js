@@ -18,7 +18,7 @@ var vendorPath = publicPath + "/app/assets/vendor";
 var angularApp = publicPath + '/app/';
 
 var serverComponents = "static/node_modules";
-var appIndex = 'app/index.html';
+var appIndex = 'app/*.html';
 var staticFolder = "static";
 
 var paths = {
@@ -83,14 +83,12 @@ var formIndex = function () {
 //default task, starts with watches
 gulp.task('default', ['watch']);
 
-gulp.task('watch', ['copyAll'], function () {
+gulp.task('watch', ['copyAll'], function (cb) {
     server.run(['public/server.js']);
-    gulp.watch([staticFolder + '/node_modules/**/*', appIndex, 'server.js'], function(event){
-        gulp.run('copyAll');
-        server.notify(event);
-    });
-    gulp.watch(staticFolder + '/css/**/*', ['handleCSS'],  function(event){server.notify(event)});
-    gulp.watch(staticFolder + '/images/**/*', ['handleImages'],   function(event){server.notify(event)});
+    gulp.watch(staticFolder + '/node_modules/**/*', ['copyAll']);
+    gulp.watch(appIndex, formIndex);
+    gulp.watch(staticFolder + '/css/**/*', ['handleCSS'], function(event){server.notify(event)});
+    gulp.watch(staticFolder + '/images/**/*', ['handleImages'], function(event){server.notify(event)});
     gulp.watch(paths.appSrc.src, function(event){
         gulp.run('handleApp');
         server.notify(event);
@@ -98,6 +96,12 @@ gulp.task('watch', ['copyAll'], function () {
 });
 
 gulp.task('copyAll', ['jquery', 'bootstrap', 'angular-ui-router', 'other_vendors', 'scripts', 'server.js', 'images', 'sass'], formIndex);
+
+gulp.task('handleIndex', ['delIndex'], formIndex);
+
+gulp.task('delIndex', function () {
+    return del(['public/app/index.html']);
+});
 
 gulp.task('handleCSS', ['copyCSS'], formIndex);
 

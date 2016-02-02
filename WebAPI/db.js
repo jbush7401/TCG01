@@ -6,6 +6,7 @@
 var knexcfg = require('./knexfile').development;
 var knex = require('knex')(knexcfg);
 var bookshelf = require('bookshelf')(knex);
+bookshelf.plugin( 'registry' );
 
 module.exports = {
     knex: knex,

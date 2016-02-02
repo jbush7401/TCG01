@@ -1,6 +1,6 @@
 ﻿(function (module) {
 
-    var oauth = function($http, $q,  formEncode, currentUser) {
+    var oauth = function($http, $q, formEncode, currentUser) {
 
         var login = function(username, password) {
 
@@ -8,7 +8,7 @@
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
-            }
+            };
 
             var data = formEncode({
                 username: username,

@@ -14,46 +14,49 @@ var _ = require('lodash');
 var Game = bookshelf.Model.extend({
     tableName: 'Game',
     Player1: function () {
-        return this.belongsTo(UserModel.User, 'Player1')
+        return this.belongsTo('User', 'Player1')
     },
     Player2: function () {
-        return this.belongsTo(UserModel.User, 'Player2')
+        return this.belongsTo('User', 'Player2')
     },
     GameBoard: function () {
-        return this.belongsTo(GameBoard, 'BoardId')
+        return this.belongsTo('GameBoard', 'BoardId')
     },
     P1_Deck: function () {
-        return this.belongsTo(PlayerGameDeck, 'P1_Deck')
+        return this.belongsTo('PlayerGameDeck', 'P1_Deck')
     },
     P2_Deck: function () {
-        return this.belongsTo(PlayerGameDeck, 'P2_Deck')
+        return this.belongsTo('PlayerGameDeck', 'P2_Deck')
     }
 });
 
 var GameBoard = bookshelf.Model.extend({
     tableName: 'GameBoard',
     Game: function () {
-        return this.hasOne(Game, 'BoardId')
+        return this.hasOne('Game', 'BoardId')
     }
 });
 
 var PlayerGameDeck = bookshelf.Model.extend({
     tableName: 'PlayerGameDeck',
     GameP1: function () {
-        return this.hasOne(Game, 'P1_Deck')
+        return this.hasOne('Game', 'P1_Deck')
     },
     GameP2: function () {
-        return this.hasOne(Game, 'P2_Deck')
+        return this.hasOne('Game', 'P2_Deck')
     },
     DeckCards: function () {
-        return this.hasMany(PlayerGameDeck_Card, "PlayerGameDeckId");
+        return this.hasMany('PlayerGameDeck_Card', "PlayerGameDeckId");
     }
 });
 
 var PlayerGameDeck_Card = bookshelf.Model.extend({
     tableName: 'PlayerGameDeck_Card',
     PlayerGameDeck: function () {
-        return this.belongsTo(PlayerGameDeck)
+        return this.belongsTo('PlayerGameDeck')
+    },
+    OriginalCard: function() {
+        return this.belongsTo('Card', 'OriginalCard')
     }
 });
 
@@ -107,8 +110,9 @@ var RandomSixtyCards = function () {
 };
 
 module.exports = {
-    Game: Game,
-    GameBoard: GameBoard,
-    PlayerGameDeck: PlayerGameDeck,
+    Game: bookshelf.model('Game', Game ),
+    GameBoard: bookshelf.model('GameBoard', GameBoard ),
+    PlayerGameDeck: bookshelf.model('PlayerGameDeck', PlayerGameDeck ),
+    PlayerGameDeck_Card: bookshelf.model('PlayerGameDeck_Card', PlayerGameDeck_Card ),
     TestDeckCreate: TestDeckCreate
 };
